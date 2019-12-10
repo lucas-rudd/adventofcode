@@ -17,12 +17,6 @@ main = do
 
 intcodeComputation :: Int -> [Int] -> [Int]
 intcodeComputation start input = do
-        traceId ("start " ++ show start)
-        traceId ("input " ++ show input)
-        traceId ("input at start " ++ show (input!!(start)))
-        traceId ("input at start + 1: " ++ show (input!!(start+1)))
-        traceId ("input at start + 2: " ++ show (input!!(start+2)))
-        traceId ("replacing value at start + 3: " ++ show (input!!(start+3)))
         case input!!(start) of
                 1  -> intcodeComputation (start+4) (Foldable.toList (Sequence.update (input!!(start+3)) ((input!!(input!!(start+1))) + (input!!(input!!(start+2)))) (Sequence.fromList input)))
                 2  -> intcodeComputation (start+4) (Foldable.toList (Sequence.update (input!!(start+3)) ((input!!(input!!(start+1))) * (input!!(input!!(start+2)))) (Sequence.fromList input)))
