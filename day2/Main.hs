@@ -1,5 +1,6 @@
 import qualified Data.Text as T
 import Debug.Trace
+import Control.Monad
 import qualified Data.Sequence as Sequence
 import qualified Data.Foldable as Foldable
 
@@ -10,10 +11,19 @@ import qualified Data.Foldable as Foldable
 -- any other Opcode means an error occurred
 
 main :: IO ()
-main = do  
-        output <- (readInputFile "input.txt")
-        let computedIntcode = intcodeComputation 0 output
-        print (computedIntcode!!0)
+main = do
+        let output = 19690720
+        input <- (readInputFile "input.txt")
+        Foldable.forM_ [1..100] $ \first -> do
+                Foldable.forM_ [1..100] $ \second -> do        
+                        let computedIntcode = intcodeComputation 0 (updateList 1 first (updateList 2 second input))
+                        when ((computedIntcode!!0) == output) $ putStr ("answer: " ++ show (100 * first + second))
+        print "done"
+
+
+updateList :: Int -> Int -> [Int] -> [Int]
+updateList index value list = (Foldable.toList (Sequence.update index value (Sequence.fromList list)))
+
 
 intcodeComputation :: Int -> [Int] -> [Int]
 intcodeComputation start input = do
